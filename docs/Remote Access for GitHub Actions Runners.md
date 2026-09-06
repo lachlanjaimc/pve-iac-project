@@ -221,3 +221,108 @@ The machine now appears in the admin console of Tailscale. Now we need to do mul
 ## 1. Allow a GitHub Actions runner to connect to the Tailscale network
 
 Following this documentation: https://tailscale.com/docs/integrations/github/github-action
+
+I had to create a tag in the Tailscale admin console under `Access controls > Definitions`
+
+![](img/ts_tag.png)
+
+I created the secrets `TS_OAUTH_CLIENT_ID` and `TS_OAUTH_SECRET` in the `pve` environment, so I needed to add `environment: pve` in the workflow
+
+After performing these steps, I get a successful run
+
+```
+Run tailscale/github-action@v4
+
+Resolved Tailscale version: 1.94.2
+
+▶️ curl [https://pkgs.tailscale.com/stable/tailscale_1.94.2_amd64.tgz.sha256](https://pkgs.tailscale.com/stable/tailscale_1.94.2_amd64.tgz.sha256)
+
+Downloading [https://pkgs.tailscale.com/stable/tailscale_1.94.2_amd64.tgz](https://pkgs.tailscale.com/stable/tailscale_1.94.2_amd64.tgz)
+
+Expected sha256: c6f99a5d774c7783b56902188d69e9756fc3dddfb08ac6be4cb2585f3fecdc32
+
+Actual sha256: c6f99a5d774c7783b56902188d69e9756fc3dddfb08ac6be4cb2585f3fecdc32
+
+/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/8b8cd995-fc8a-43a1-8e49-8aef6f07fd37 -f /home/runner/.cache/tailscale.tgz
+
+▶️ copy tailscale binaries to /usr/local/bin
+
+▶️ chmod tailscale binary
+
+▶️ chmod tailscaled binary
+
+/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/pve-iac-project/pve-iac-project --files-from manifest.txt --use-compress-program zstdmt
+
+Sent 34760012 of 34760012 (100.0%), 33.1 MBs/sec
+
+Cached Tailscale 1.94.2 at: /opt/hostedtoolcache/tailscale/1.94.2/Linux-amd64
+
+Starting tailscaled daemon...
+
+Waiting for tailscaled daemon to become ready...
+
+▶️ get tailscale status
+
+Daemon ready! Initial state: NeedsLogin
+
+✅ tailscaled daemon is up and running!
+
+▶️ hostname
+
+Attempt 1 to bring up Tailscale...
+
+▶️ tailscale up
+
+✅ Tailscale up command completed successfully on attempt 1
+
+▶️ get tailscale status
+
+✅ Tailscale is running and connected!
+```
+
+## 2. Make sure the runner can ping the Proxmox node
+
+I'll add a step in the job to ping the IP of the Proxmox node. If this doesn't work, I'll look at advertising the subnet in Tailscale
+
+It looks like it fails with just the Tailscale step
+
+```
+Run ping -c 3 ***
+
+ping -c 3 ***
+
+shell: /usr/bin/bash -e {0}
+
+PING *** (***) 56(84) bytes of data.
+
+--- *** ping statistics ---
+
+3 packets transmitted, 0 received, 100% packet loss, time 2048ms
+
+Error: Process completed with exit code 1.
+```
+
+I was advertising the subnet on the GitHub runner which is wrong! It should be advertised on the LXC
+
+The other issue I ran into was that **IP forwarding must also be enabled** in the LXC. I incorrectly assumed that as long as it was enabled on the node and the device was passed through I would be fine. I turned to Gemini to figure out this one. However now I can ping the PVE node!
+
+![](img/actions_ts.png)
+
+## 3. Authenticate to the Proxmox API (preferably with a token)
+
+Now the runner can ping the Proxmox node, I'll set up the Terraform provider to authenticate with it
+
+Having the Terraform job after the Tailscale job seems to work
+
+I use the following env variables with the Terraform plan using GH secrets
+
+```
+- name: Terraform plan
+run: terraform plan
+env:
+  PROXMOX_VE_ENDPOINT: ${{ secrets.PROXMOX_VE_ENDPOINT }}
+  PROXMOX_VE_USERNAME: ${{ secrets.PROXMOX_VE_USERNAME }}
+  PROXMOX_VE_PASSWORD: ${{ secrets.PROXMOX_VE_PASSWORD }}
+```
+
+For the initial connection need to use Username/Password, also need to store state somewhere like S3
