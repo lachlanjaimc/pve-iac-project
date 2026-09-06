@@ -30,6 +30,7 @@ jobs:
           tags: tag:ci
 
   proxmox_tf_test:
+    needs: tailscale_connect
     environment: pve
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
