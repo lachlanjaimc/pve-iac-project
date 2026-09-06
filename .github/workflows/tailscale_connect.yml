@@ -30,5 +30,7 @@ jobs:
           tags: tag:ci
 
       - name: Ping Proxmox node
-        run: 'ping -c 3 ${{ secrets.PVE_IP }}'
+        run: |
+          sleep 5
+          ping -c 3 ${{ secrets.PVE_IP }}
           
