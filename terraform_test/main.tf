@@ -1,3 +1,10 @@
+terraform {
+  required_providers {
+    source = "bpg/proxmox"
+    version = "0.112.0"
+  }
+}
+
 provider "proxmox" {
   endpoint = "https://{{ secrets.PVE_IP }}:8006/"
   username = "root@pam"
