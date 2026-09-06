@@ -51,5 +51,10 @@ jobs:
 
       - name: Terraform plan
         run: terraform plan
+        env:
+          PROXMOX_VE_ENDPOINT: ${{ secrets.PROXMOX_VE_ENDPOINT }}
+          PROXMOX_VE_USERNAME: ${{ secrets.PROXMOX_VE_USERNAME }}
+          PROXMOX_VE_PASSWORD: ${{ secrets.PROXMOX_VE_PASSWORD }}
+          
 
       
