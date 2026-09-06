@@ -9,19 +9,19 @@ https://tailscale.com/docs/integrations/github/github-action
 ##Setup Tailscale
 First I created a new TS account using my GitHub account as the login
 
-![[/img/tsnewacc.png]]
+![](img/tsnewacc.png)
 
 Now the decision is whether to install Proxmox on the node itself or in an LXC container. First I tried in an LXC container to hopefully reduce the attack surface by exposing my node to GitHub. This means creating infrastructure outside of Terraform however, but this container should be on its own network anyway
 
-![[create_mgmt_bridge.png]]
+![](img/create_mgmt_bridge.png)
 
 I then pulled the Debian 13 CT template
 
-![[d13.png]]
+![](d13.png)
 
 Make sure to add /dev/net/tun for an unprivileged container as per https://tailscale.com/docs/features/containers/lxc/lxc-unprivileged
 
-![[tun_passthrough.png]]
+![](tun_passthrough.png)
 
 Out of the box, the container can ping the gateway and the Proxmox node, but not the Internet
 
@@ -210,7 +210,7 @@ To authenticate, visit:
 Success.
 ```
 
-![[ts_new_device.png]]
+![](img/ts_new_device.png)
 
 The machine now appears in the admin console of Tailscale. Now we need to do multiple things:
 
