@@ -9,7 +9,7 @@ https://tailscale.com/docs/integrations/github/github-action
 ##Setup Tailscale
 First I created a new TS account using my GitHub account as the login
 
-![[img/tsnewacc.png]]
+![[/img/tsnewacc.png]]
 
 Now the decision is whether to install Proxmox on the node itself or in an LXC container. First I tried in an LXC container to hopefully reduce the attack surface by exposing my node to GitHub. This means creating infrastructure outside of Terraform however, but this container should be on its own network anyway
 
