@@ -36,7 +36,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./terraform_test
+        working-directory: terraform_test
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
