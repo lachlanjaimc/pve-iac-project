@@ -43,10 +43,10 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-        working-directory: ./terraform_test
+        working-directory: /terraform_test
 
       - name: Terraform plan
         run: terraform plan
-        working-directory: ./terraform_test
+        working-directory: /terraform_test
 
       
