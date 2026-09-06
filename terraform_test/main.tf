@@ -8,9 +8,6 @@ terraform {
 }
 
 provider "proxmox" {
-  endpoint = "https://{{ secrets.PVE_IP }}:8006/"
-  username = "root@pam"
-  password = "{{ secrets.PVE_PASSWORD }}"
   insecure = true
 }
 
