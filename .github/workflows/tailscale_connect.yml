@@ -34,6 +34,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./terraform_test
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v4
@@ -43,10 +47,8 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-        working-directory: /terraform_test
 
       - name: Terraform plan
         run: terraform plan
-        working-directory: /terraform_test
 
       
