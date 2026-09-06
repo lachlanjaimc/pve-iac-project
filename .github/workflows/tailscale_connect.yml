@@ -1,4 +1,4 @@
-name: Connect to Tailscale network
+name: Connect to Tailscale network and Terraform apply on Proxmox node
 
 # Controls when the workflow will run
 on:
@@ -29,8 +29,24 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Ping Proxmox node
-        run: |
-          sleep 5
-          ping -c 3 ${{ secrets.PVE_IP }}
-          
+  proxmox_tf_test:
+    environment: pve
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform init
+        working-directory: ./terraform_test
+
+      - name: Terraform plan
+        run: terraform plan
+        working-directory: ./terraform_test
+
+      
