@@ -1,7 +1,9 @@
 terraform {
   required_providers {
-    source = "bpg/proxmox"
-    version = "~> 0.112.0"
+    proxmox = {    
+      source = "bpg/proxmox"
+      version = "~> 0.112.0"
+    }
   }
 }
 
