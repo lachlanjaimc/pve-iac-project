@@ -23,6 +23,6 @@ This hardware specification will allow separating hypervisor, VM and database di
 
 I installed the Proxmox VE as standard, disabling the enterprise repos and enabling the non-subscriptions equivalents, then updating the system and rebooting if the kernel was updated.
 
-![[disk_setup.png]]
+![](img/disk_setup.png)
 
 I set up one of the 240GB SSDs for VM and CT disks. This will ensure the hypervisor gets the full speed and IO of the boot drive
