@@ -14,10 +14,11 @@ provider "aws" {
 resource "random_string" "bucket_suffix" {
   length = 5
   special = false
+  upper = false
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-    bucket = "pve-iac-project_tfstate${random_string.bucket_suffix.result}"
+    bucket = "pve-iac-project-tfstate-${random_string.bucket_suffix.result}"
 
     lifecycle {
       prevent_destroy = true
