@@ -304,7 +304,7 @@ Error: Process completed with exit code 1.
 
 I was advertising the subnet on the GitHub runner which is wrong! It should be advertised on the LXC
 
-The other issue I ran into was that **IP forwarding must also be enabled** in the LXC. I incorrectly assumed that as long as it was enabled on the node and the device was passed through I would be fine. I turned to Gemini to figure out this one. However now I can ping the PVE node!
+The other issue I ran into was that **IP forwarding must also be enabled** in the LXC. I incorrectly assumed that as long as it was enabled on the node and the /dev/net/tun device was passed through I would be fine. I turned to Gemini to figure out this one. However now I can ping the PVE node!
 
 ![](img/actions_ts.png)
 
