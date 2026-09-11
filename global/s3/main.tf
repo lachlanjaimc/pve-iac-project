@@ -5,6 +5,14 @@ terraform {
         version = "~> 6.64.0"
     }
   }
+
+  backend "s3" {
+    key            = "global/s3/terraform.tfstate"
+    bucket         = "pve-iac-project-tfstate-9ut8e"
+    region         = "us-west-2"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
 }
 
 provider "aws" {
